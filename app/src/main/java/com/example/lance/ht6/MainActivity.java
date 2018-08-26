@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: Clicked the go to create new words (settings) button");
-                Intent settingsIntent = new Intent(MainActivity.this,   NewWords.class);
+                Intent settingsIntent = new Intent(MainActivity.this, NewWords.class);
                 startActivity(settingsIntent);
             }
         });
@@ -43,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         startButton = findViewById(R.id.start_button);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent startRecording = new Intent(MainActivity.this, Recording.class);
+                startActivity(startRecording);
+            }
+        });
         myDb = new DatabaseHelper(this);
     }
 

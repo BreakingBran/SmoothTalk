@@ -32,7 +32,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="38dp"
         android:background="@drawable/end_button"
-        android:text="I'm done speaking! Generate report"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:textColor="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
