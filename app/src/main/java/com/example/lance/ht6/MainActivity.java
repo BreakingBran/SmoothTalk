@@ -1,5 +1,6 @@
 package com.example.lance.ht6;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,9 +21,17 @@ public class MainActivity extends AppCompatActivity {
         settingsButton = findViewById(R.id.settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Intent enterWords = new Intent(MainActivity.this, NewWords.class);
+                startActivity(enterWords);
             }
         });
         startButton = findViewById(R.id.start_button);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent startRecording = new Intent(MainActivity.this, Recording.class);
+                startActivity(startRecording);
+            }
+        });
         myDb = new DatabaseHelper(this);
     }
 }
