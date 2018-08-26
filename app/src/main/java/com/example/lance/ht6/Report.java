@@ -7,12 +7,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.lance.ht6.utils.*;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -40,23 +44,35 @@ public class Report extends AppCompatActivity {
 
         chart = (LineChart) findViewById(R.id.chart);
 
-        PhilData[] items = {};
+        ArrayList<ReportData> items = WriteReport.getReportData();
 
-        generateGraph(chart,items);
+        generateGraph(chart, items);
 
     }
 
-    private static void generateGraph(LineChart chart, PhilData[] items){
+    private static float dateStringToFloat(String date) {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        long milliseconds = 0l;
+        try {
+            Date d = f.parse(date);
+            milliseconds = d.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return (float) milliseconds;
+    }
+
+    private static void generateGraph(LineChart chart, ArrayList<ReportData> items){
 //        PHIL WILL MAKE A FUNCTION THAT WILL GIVE A LIST OF DATA POINTS
         Random rand = new Random();
         int randomColour;
-        for(PhilData item : items){
+        for(ReportData item : items){
             List<Entry> entries = new ArrayList<Entry>();
             for (Posn data : item.getPosns()) {
                 // turn your data into Entry objects
-                entries.add(new Entry(data.x(), data.y()));
+                entries.add(new Entry(dateStringToFloat(data.x()), data.y()));
             }
-            LineDataSet dataSet = new LineDataSet(entries, item.word); // add entries to dataset
+            LineDataSet dataSet = new LineDataSet(entries, item.getWord()); // add entries to dataset
             randomColour = rand.nextInt();
             dataSet.setColor(randomColour);
             dataSet.setValueTextColor(randomColour);
