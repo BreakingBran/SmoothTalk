@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageButton settingsButton;
     Button startButton;
+    ImageButton reportButton;
     DatabaseHelper myDb;
     private static final String TAG = "MainActivity";
 
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: Starting");
         settingsButton = findViewById(R.id.settings_button);
+        reportButton = findViewById(R.id.report_button);
+
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -29,6 +32,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(settingsIntent);
             }
         });
+
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Clicked the go to reports button");
+                Intent reportIntent = new Intent(MainActivity.this,   Report.class);
+                startActivity(reportIntent);
+            }
+        });
+
         startButton = findViewById(R.id.start_button);
         myDb = new DatabaseHelper(this);
     }
