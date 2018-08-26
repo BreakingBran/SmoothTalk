@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.lance.ht6.schemas.EventsTableContract.EventsEntry;
+import com.example.lance.ht6.schemas.EventsTableContract.ReportPerMinuteEntry;
 import com.example.lance.ht6.schemas.CountsTableContract.CountsEntry;
 
 import java.text.DateFormat;
@@ -22,9 +22,9 @@ public class DatabaseUtilities {
         String date = df.format(Calendar.getInstance().getTime());
         if (wordList.contains(text)) {
             // insert database record
-            newEvent.put(EventsEntry.TIMESTAMP_COLUMN, date);
-            newEvent.put(EventsEntry.WORD_COLUMN, text);
-            dbEvents.insert(EventsEntry.TABLE_NAME, null, newEvent);
+            newEvent.put(ReportPerMinuteEntry.TIMESTAMP_COLUMN, date);
+            newEvent.put(ReportPerMinuteEntry.WORD_COLUMN, text);
+            dbEvents.insert(ReportPerMinuteEntry.TABLE_NAME, null, newEvent);
         }
     }
 
@@ -46,9 +46,17 @@ public class DatabaseUtilities {
         dbCounts.insert(CountsEntry.TABLE_NAME, null, newCount);
     }
 
+    /** Updates Reports table from Events Table **/
+    public void createReportPerMinute(SQLiteDatabase dbEvents,
+                                      SQLiteDatabase dbReports,
+                                      List<String> wordList,
+                                      int sessionId) {
+        // update dbReports
+    }
+
     public void resetTables(SQLiteDatabase dbEvents,
                             SQLiteDatabase dbCounts) {
-        dbEvents.execSQL("delete from " + EventsEntry.TABLE_NAME);
+        dbEvents.execSQL("delete from " + ReportPerMinuteEntry.TABLE_NAME);
         dbCounts.execSQL("delete from " + CountsEntry.TABLE_NAME);
     }
 }
