@@ -58,7 +58,7 @@ public class DatabaseUtilities {
 
     public void resetTables(SQLiteDatabase dbEvents,
                             SQLiteDatabase dbCounts,
-                            SQLiteDatabase dbReports,) {
+                            SQLiteDatabase dbReports) {
         dbEvents.execSQL("delete from " + EventsEntry.TABLE_NAME);
         dbCounts.execSQL("delete from " + CountsEntry.TABLE_NAME);
         dbReports.execSQL("delete from " + ReportPerMinuteEntry.TABLE_NAME);
