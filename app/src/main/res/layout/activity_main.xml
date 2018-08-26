@@ -64,11 +64,11 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="419dp"
-        android:layout_height="146dp"
+        android:layout_width="397dp"
+        android:layout_height="117dp"
         app:srcCompat="@drawable/logo_light"
-        tools:layout_editor_absoluteX="-38dp"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="34dp" />
 
 
 </android.support.constraint.ConstraintLayout>

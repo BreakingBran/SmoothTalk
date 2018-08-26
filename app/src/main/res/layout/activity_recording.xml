@@ -63,7 +63,7 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="367dp"
+        android:layout_width="397dp"
         android:layout_height="117dp"
         app:srcCompat="@drawable/logo_light"
         tools:layout_editor_absoluteX="1dp"
