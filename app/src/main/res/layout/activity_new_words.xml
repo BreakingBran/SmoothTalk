@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,10 +10,13 @@
         android:id="@+id/editText"
         android:layout_width="200dp"
         android:layout_height="38dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="182dp"
         android:ems="10"
+        android:gravity="center"
         android:inputType="text"
         android:text="New Word"
-        android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:layout_editor_absoluteX="64dp"
         tools:layout_editor_absoluteY="134dp" />
@@ -22,7 +25,22 @@
         android:id="@+id/new_word_submit"
         android:layout_width="169dp"
         android:layout_height="76dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="249dp"
         android:text="Submit"
         tools:layout_editor_absoluteX="80dp"
         tools:layout_editor_absoluteY="196dp" />
-</android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/newWordsToMainButton"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="47dp"
+        android:text="Go Back"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="25dp" />
+</RelativeLayout>
