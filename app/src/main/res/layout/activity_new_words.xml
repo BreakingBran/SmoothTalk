@@ -16,7 +16,7 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="text"
-        android:text="New Word"
+        android:text="um"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:layout_editor_absoluteX="64dp"
         tools:layout_editor_absoluteY="134dp" />
@@ -41,6 +41,17 @@
         android:layout_marginStart="29dp"
         android:layout_marginTop="47dp"
         android:text="Go Back"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="25dp" />
+
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/newWordsToMainButton"
+        android:layout_marginEnd="39dp"
+        android:text="RESET"
         tools:layout_editor_absoluteX="28dp"
         tools:layout_editor_absoluteY="25dp" />
 </RelativeLayout>
