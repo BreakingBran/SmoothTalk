@@ -16,6 +16,7 @@ import com.example.lance.ht6.utils.DatabaseUtilities;
 import com.example.lance.ht6.utils.ReportData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WriteReport extends AppCompatActivity {
 
@@ -35,7 +36,7 @@ public class WriteReport extends AppCompatActivity {
         dbEvents = dbEventsHelper.getWritableDatabase();
         dbReports = dbReportsHelper.getWritableDatabase();
 
-        ArrayList<String> wordList = DatabaseUtilities.getWordList(getContext().getFilesDir());
+        List<String> wordList = DatabaseUtilities.getWordList(getContext().getFilesDir());
 
         int sessionId = DatabaseUtilities.getSessionId(dbEvents);
 
@@ -47,7 +48,7 @@ public class WriteReport extends AppCompatActivity {
                 sessionId);
 
         for (int i=0; i < wordList.size(); i++) {
-            allReportData.add(DatabaseUtilities.generatePlotData(dbReports, wordList[i], sessionId));
+            allReportData.add(DatabaseUtilities.generatePlotData(dbReports, wordList.get(i), sessionId));
         }
     }
 

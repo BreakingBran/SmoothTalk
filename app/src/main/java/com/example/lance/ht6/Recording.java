@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.lance.ht6.schemas.CountsTableContract;
 import com.example.lance.ht6.schemas.CountsTableDbHelper;
 import com.example.lance.ht6.schemas.EventsTableContract;
+import com.example.lance.ht6.schemas.EventsTableDbHelper;
 import com.example.lance.ht6.utils.DatabaseUtilities;
 
 import java.io.BufferedReader;

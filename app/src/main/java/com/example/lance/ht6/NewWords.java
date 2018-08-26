@@ -47,7 +47,6 @@ public class NewWords extends AppCompatActivity {
             }
         });
 
-        myDb = new DatabaseHelper(this);
 
         //        NAVIGATE TO MAIN PAGE
         btnNavToMain = (Button) findViewById(R.id.newWordsToMainButton);

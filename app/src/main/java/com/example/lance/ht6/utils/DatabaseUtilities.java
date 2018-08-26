@@ -60,7 +60,7 @@ public class DatabaseUtilities {
                                  String word,
                                  int sessionId){
 
-        String sqlQuery = "select interval, count from ReportsMinute where word = ? and session = ?";
+        String sqlQuery = "select interval, count from ReportMinutes where word = ? and session = ?";
         String[] sqlQueryArguments = { word, Integer.toString(sessionId) };
         Cursor resultRows = dbReports.rawQuery(sqlQuery, sqlQueryArguments);
         return new ReportData(word, getNewValuesPosn(resultRows));
@@ -99,7 +99,7 @@ public class DatabaseUtilities {
                                       List<String> wordList,
                                       int sessionId) {
         // build query
-        String newRowQuery = "select datetime((strftime('%s', time) / 3600) * 3600, 'unixepoch') interval, word, count(*) as count " +
+        String newRowQuery = "select datetime((strftime('%s', timestamp) / 3600) * 3600, 'unixepoch') interval, word, count(*) as count " +
                 "from Events " +
                 "where session = ? " +
                 "GROUP BY interval, word " +
