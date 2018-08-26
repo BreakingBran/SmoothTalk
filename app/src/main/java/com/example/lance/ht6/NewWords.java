@@ -37,7 +37,7 @@ public class NewWords extends AppCompatActivity {
         btnReset.setOnClickListener((v) -> {
             try {
                 outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                outputStream.write("".getBytes());
+                outputStream.write("um /5e-1/".getBytes());
                 outputStream.close();
                 Toast.makeText(getApplicationContext(), "Word set reset", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
@@ -54,9 +54,9 @@ public class NewWords extends AppCompatActivity {
             String textToWrite = wordField.getText().toString();
             // Longer words should have lower threshold
             if (textToWrite.length() < 5) {
-                textToWrite = textToWrite + " /1e-1/\n";
+                textToWrite = "\n" + textToWrite + " /5e-1/";
             } else {
-                textToWrite = textToWrite + " /1e-8/\n";
+                textToWrite = "\n" + textToWrite + " /1e-10/";
             }
             Log.d(TAG, "onClick: clicked btnSubmit");
             try {

@@ -1,0 +1,10 @@
+#JSGF V1.0;
+
+grammar fillers;
+
+<filler> = uh |
+hm |
+           um |
+          like  ;
+
+public <fillers> = <filler>+;

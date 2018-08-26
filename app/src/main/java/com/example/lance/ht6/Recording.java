@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.lance.ht6.schemas.CountsTableContract;
 import com.example.lance.ht6.schemas.CountsTableDbHelper;
 import com.example.lance.ht6.schemas.EventsTableContract;
+import com.example.lance.ht6.utils.DatabaseUtilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -105,31 +106,20 @@ public class Recording extends AppCompatActivity implements
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
             return;
         }
-        wordList = new ArrayList<>();
-        File keywords = new File(getContext().getFilesDir(), "keywords.txt");
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(keywords));
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                wordList.add(line.split("\\s+")[0]);
-            }
-            br.close();
-        }
-        catch (IOException e) {
-            Log.i(TAG, e.getMessage());
-        }
+        wordList = DatabaseUtilities.getWordList(this.getApplicationContext().getFilesDir());
+        Log.i(TAG, "Words detected: " + Arrays.toString(wordList.toArray()));
 
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
         new SetupTask(this).execute();
         stopButton = findViewById(R.id.end_button);
-//        stopButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                Intent startRecording = new Intent(Recording.this, MainActivity.class);
-//                startActivity(startRecording);
-//            }
-//        });
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent startRecording = new Intent(Recording.this, MainActivity.class);
+                startActivity(startRecording);
+                finish();
+            }
+        });
 
     }
     private static class SetupTask extends AsyncTask<Void, Void, Exception> {
@@ -153,6 +143,7 @@ public class Recording extends AppCompatActivity implements
             if (result != null) {
                 Log.i(TAG, result.getMessage());
             } else {
+                Log.i(TAG, "STARTING");
                 activityReference.get().switchSearch(KEYWORDS_SEARCH);
             }
         }
@@ -196,9 +187,10 @@ public class Recording extends AppCompatActivity implements
             return;
 
         String text = hypothesis.getHypstr().split("\\s+")[0];
-
+        makeText(getContext(), "Detected " + text, Toast.LENGTH_SHORT);
          Log.i(Recording.class.getSimpleName(), "DETECTED " + text + "\n");
             updateEvents(text);
+            for (int i = 0; i <100000; i++);
     }
 
     /**
@@ -275,23 +267,23 @@ public class Recording extends AppCompatActivity implements
         recognizer.stop();
 
         // If we are not spotting, start listening with timeout (10000 ms or 10 seconds).
-        if (searchName.equals(KEYWORDS_SEARCH))
-            recognizer.startListening(searchName);
+        if (searchName.equals(KEYWORDS_SEARCH)){
+            Log.i(TAG, "Started Listening");
+            makeText(getContext(), "Started Listening", Toast.LENGTH_SHORT);
+            recognizer.startListening(searchName);}
         else
             recognizer.startListening(searchName, 20000);
-
-        String caption = getResources().getString(captions.get(searchName));
-    }
+        }
 
     private void setupRecognizer(File assetsDir) throws IOException {
         // The recognizer can be configured to perform multiple searches
         // of different kind and switch between them
 
         recognizer = SpeechRecognizerSetup.defaultSetup()
-                .setAcousticModel(new File(getContext().getFilesDir(), "en-us-ptm"))
-                .setDictionary(new File(getContext().getFilesDir(), "cmudict-en-us.dict"))
+                .setAcousticModel(new File(assetsDir, "en-us-ptm"))
+                .setDictionary(new File(assetsDir, "cmudict-en-us.dict"))
 
-                .setRawLogDir(getContext().getFilesDir()) // To disable logging of raw audio comment out this call (takes a lot of space on the device)
+                .setRawLogDir(assetsDir) // To disable logging of raw audio comment out this call (takes a lot of space on the device)
 
                 .getRecognizer();
         recognizer.addListener(this);

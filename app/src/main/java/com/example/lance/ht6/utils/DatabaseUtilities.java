@@ -3,14 +3,20 @@ package com.example.lance.ht6.utils;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.lance.ht6.schemas.EventsTableContract.EventsEntry;
 import com.example.lance.ht6.schemas.ReportPerMinuteTableContract;
 import com.example.lance.ht6.schemas.ReportPerMinuteTableContract.ReportPerMinuteEntry;
 import com.example.lance.ht6.schemas.CountsTableContract.CountsEntry;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -62,5 +68,22 @@ public class DatabaseUtilities {
         dbEvents.execSQL("delete from " + EventsEntry.TABLE_NAME);
         dbCounts.execSQL("delete from " + CountsEntry.TABLE_NAME);
         dbReports.execSQL("delete from " + ReportPerMinuteEntry.TABLE_NAME);
+    }
+
+    public static List<String> getWordList(File filesDir) {
+        List<String> wordList = new ArrayList<>();
+        File keywords = new File(filesDir, "keywords.txt");
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(keywords));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                wordList.add(line.split("\\s+")[0]);
+            }
+            br.close();
+        }
+        catch (IOException e) {
+        }
+        return wordList;
     }
 }
