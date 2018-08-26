@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.lance.ht6.schemas.EventsTableDbHelper;
+
 import java.io.FileOutputStream;
 
 public class NewWords extends AppCompatActivity {
@@ -20,7 +22,7 @@ public class NewWords extends AppCompatActivity {
     Button btnNavToMain;
     EditText wordField;
     Button submitNewWord;
-    DatabaseHelper myDb;
+    EventsTableDbHelper dbEventsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

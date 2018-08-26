@@ -14,6 +14,11 @@
         tools:layout_editor_absoluteX="28dp"
         tools:layout_editor_absoluteY="29dp" />
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="243dp"
@@ -29,5 +34,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.11"
         app:srcCompat="@drawable/your_progress_title" />
+
+
 
 </android.support.constraint.ConstraintLayout>

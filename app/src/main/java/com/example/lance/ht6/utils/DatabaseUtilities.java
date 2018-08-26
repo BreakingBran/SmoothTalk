@@ -2,6 +2,7 @@ package com.example.lance.ht6.utils;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -22,11 +23,11 @@ import java.util.List;
 
 public class DatabaseUtilities {
 
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z");
-    public void updateEvents(SQLiteDatabase dbEvents,
+    public static void updateEvents(SQLiteDatabase dbEvents,
                              String text,
                              List<String> wordList) {
         ContentValues newEvent = new ContentValues();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = df.format(Calendar.getInstance().getTime());
         if (wordList.contains(text)) {
             // insert database record
@@ -36,7 +37,7 @@ public class DatabaseUtilities {
         }
     }
 
-    public void updateCounts(SQLiteDatabase dbCounts,
+    public static void updateCounts(SQLiteDatabase dbCounts,
                              String text,
                              List<String> wordList) {
         int count = 0;
@@ -54,15 +55,100 @@ public class DatabaseUtilities {
         dbCounts.insert(CountsEntry.TABLE_NAME, null, newCount);
     }
 
+    /** Return plot data for one word **/
+    public static ReportData generatePlotData(SQLiteDatabase dbReports,
+                                 String word,
+                                 int sessionId){
+
+        String sqlQuery = "select interval, count from ReportsMinute where word = ? and session = ?";
+        String[] sqlQueryArguments = { word, Integer.toString(sessionId) };
+        Cursor resultRows = dbReports.rawQuery(sqlQuery, sqlQueryArguments);
+        return new ReportData(word, getNewValuesPosn(resultRows));
+    }
+
+    /** Generates <word, count> list from queried rows. **/
+    private static ArrayList<Posn> getNewValuesPosn(Cursor newRows) {
+        ArrayList<Posn> retVal = new ArrayList<>();
+        Posn newValues;
+        if(newRows.moveToFirst()) {
+            do {
+                newValues = new Posn(newRows.getString(0), newRows.getInt(1));
+                retVal.add(newValues);
+            } while(newRows.moveToNext());
+        }
+        return retVal;
+    }
+
+    private ArrayList<ContentValues> getNewValues(Cursor newRows) {
+        ArrayList<ContentValues> retVal = new ArrayList<ContentValues>();
+        ContentValues newValues;
+        if(newRows.moveToFirst()) {
+            do {
+                newValues = new ContentValues();
+                DatabaseUtils.cursorRowToContentValues(newRows, newValues);
+                retVal.add(newValues);
+            } while(newRows.moveToNext());
+        }
+        return retVal;
+    }
+
+
     /** Updates Reports table from Events Table **/
-    public void createReportPerMinute(SQLiteDatabase dbEvents,
+    public static void createReportPerMinute(SQLiteDatabase dbEvents,
                                       SQLiteDatabase dbReports,
                                       List<String> wordList,
                                       int sessionId) {
-        // update dbReports
+        // build query
+        String newRowQuery = "select datetime((strftime('%s', time) / 3600) * 3600, 'unixepoch') interval, word, count(*) as count " +
+                "from Events " +
+                "where session = ? " +
+                "GROUP BY interval, word " +
+                "ORDER BY interval";
+
+        // get new rows from events
+        Cursor newRows = dbEvents.rawQuery(newRowQuery, new String[]{ Integer.toString(sessionId) });
+
+        // update rows where session matches the session_id
+        String selection = ReportPerMinuteEntry.SESSION_COLUMN + " LIKE ?";
+        String[] selectionArgs = { Integer.toString(sessionId) };
+
+        // loop through the new rows
+        dbReports.beginTransaction();
+
+        ArrayList<ContentValues> updatedTable = new ArrayList<ContentValues>();
+        ContentValues newValues;
+
+        if(newRows.moveToFirst()) {
+            do {
+                newValues = new ContentValues();
+                DatabaseUtils.cursorRowToContentValues(newRows, newValues);
+                updatedTable.add(newValues);
+            } while(newRows.moveToNext());
+        }
+
+        for (int i = 0; i < updatedTable.size(); i++) {
+            dbReports.update(
+                    ReportPerMinuteEntry.TABLE_NAME,
+                    updatedTable.get(i),
+                    selection,
+                    selectionArgs);
+        }
+
+        dbReports.setTransactionSuccessful();
+        dbReports.endTransaction();
     }
 
-    public void resetTables(SQLiteDatabase dbEvents,
+    public static int getSessionId(SQLiteDatabase dbEvents) {
+        // get most recent session
+        String sqlQuery = "select session from Events";
+        Cursor result = dbEvents.rawQuery(sqlQuery, new String[]{});
+        if (result.moveToLast()) {
+            return result.getInt(0);
+        }
+        return 0;
+    }
+
+    public static void resetTables(SQLiteDatabase dbEvents,
                             SQLiteDatabase dbCounts,
                             SQLiteDatabase dbReports) {
         dbEvents.execSQL("delete from " + EventsEntry.TABLE_NAME);
