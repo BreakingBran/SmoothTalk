@@ -7,7 +7,7 @@
     tools:context=".NewWords">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/new_word_field"
         android:layout_width="200dp"
         android:layout_height="38dp"
         android:layout_alignParentTop="true"
@@ -15,8 +15,12 @@
         android:layout_marginTop="182dp"
         android:ems="10"
         android:gravity="center"
+        android:hint="New Word"
         android:inputType="text"
+<<<<<<< HEAD
         android:text="um"
+=======
+>>>>>>> Added ability to save words to db
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:layout_editor_absoluteX="64dp"
         tools:layout_editor_absoluteY="134dp" />
