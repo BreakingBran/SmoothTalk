@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "onClick: Clicked the go to reports button");
                 Intent writeReport = new Intent(MainActivity.this, WriteReport.class);
-                Intent reportIntent = new Intent(MainActivity.this, Report.class);
-                startActivity(reportIntent);
+                startActivity(writeReport);
             }
         });
 
