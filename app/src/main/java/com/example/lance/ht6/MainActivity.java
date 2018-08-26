@@ -10,6 +10,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageButton settingsButton;
     Button startButton;
+    DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +20,9 @@ public class MainActivity extends AppCompatActivity {
         settingsButton = findViewById(R.id.settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
             }
         });
-
         startButton = findViewById(R.id.start_button);
+        myDb = new DatabaseHelper(this);
     }
 }
