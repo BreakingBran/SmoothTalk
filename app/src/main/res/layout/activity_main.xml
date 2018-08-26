@@ -66,7 +66,7 @@
         android:id="@+id/imageView"
         android:layout_width="419dp"
         android:layout_height="146dp"
-        app:srcCompat="@drawable/logo_light"
+        app:srcCompat="@drawable/logo_dark"
         tools:layout_editor_absoluteX="-38dp"
         tools:layout_editor_absoluteY="16dp" />
 
