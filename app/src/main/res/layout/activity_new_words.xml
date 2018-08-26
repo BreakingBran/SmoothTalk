@@ -17,10 +17,7 @@
         android:gravity="center"
         android:hint="New Word"
         android:inputType="text"
-<<<<<<< HEAD
         android:text="um"
-=======
->>>>>>> Added ability to save words to db
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:layout_editor_absoluteX="64dp"
         tools:layout_editor_absoluteY="134dp" />

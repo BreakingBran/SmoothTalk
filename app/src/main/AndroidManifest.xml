@@ -19,6 +19,9 @@
 
         <activity android:name=".Report" />
         <activity android:name=".NewWords"></activity>
+        <activity android:name=".Recording" />
+        <activity android:name=".WriteReport" />
+
     </application>
 
 </manifest>

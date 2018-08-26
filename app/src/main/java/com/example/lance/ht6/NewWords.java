@@ -32,7 +32,7 @@ public class NewWords extends AppCompatActivity {
         Button btnNavToMain = (Button) findViewById(R.id.newWordsToMainButton);
         Button btnSubmit = (Button) findViewById(R.id.new_word_submit);
         Button btnReset = (Button) findViewById(R.id.resetButton);
-        final EditText mEdit = (EditText) findViewById(R.id.editText);
+        final EditText mEdit = (EditText) findViewById(R.id.new_word_field);
 
         btnReset.setOnClickListener((v) -> {
             try {
