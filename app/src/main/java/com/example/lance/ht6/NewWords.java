@@ -29,10 +29,10 @@ public class NewWords extends AppCompatActivity {
         setContentView(R.layout.activity_new_words);
 
 
-        Button btnNavToMain = (Button) findViewById(R.id.newWordsToMainButton);
         Button btnSubmit = (Button) findViewById(R.id.new_word_submit);
         Button btnReset = (Button) findViewById(R.id.resetButton);
-        final EditText mEdit = (EditText) findViewById(R.id.new_word_field);
+        //        NEW WORD FIELD
+        wordField = (EditText) findViewById(R.id.new_word_field);
 
         btnReset.setOnClickListener((v) -> {
             try {
@@ -51,7 +51,7 @@ public class NewWords extends AppCompatActivity {
         btnNavToMain = (Button) findViewById(R.id.newWordsToMainButton);
 
         btnSubmit.setOnClickListener((v) -> {
-            String textToWrite = mEdit.getText().toString();
+            String textToWrite = wordField.getText().toString();
             // Longer words should have lower threshold
             if (textToWrite.length() < 5) {
                 textToWrite = textToWrite + " /1e-1/\n";
@@ -63,7 +63,7 @@ public class NewWords extends AppCompatActivity {
                 outputStream = openFileOutput(filename, MODE_APPEND);
                 outputStream.write(textToWrite.getBytes());
                 outputStream.close();
-                Toast.makeText(getApplicationContext(), mEdit.getText().toString() + " added!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), wordField.getText().toString() + " added!", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -74,27 +74,6 @@ public class NewWords extends AppCompatActivity {
                 Log.d(TAG, "onClick: clicked btnNavToMain");
                 Intent intent = new Intent(NewWords.this, MainActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        //        NEW WORD FIELD
-        wordField = (EditText) findViewById(R.id.new_word_field);
-
-        //      SUBMIT NEW WORD BUTTON
-        submitNewWord = (Button) findViewById(R.id.new_word_submit);
-
-        submitNewWord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: attempted submited new word");
-                if(wordField.getText().toString() != ""){
-                    boolean isInserted = myDb.insertWordData(wordField.getText().toString(),0);
-                    if(isInserted == true){
-                        Toast.makeText(NewWords.this, "Word Added", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(NewWords.this, "Failed to Add Word :(", Toast.LENGTH_SHORT).show();
-                    }
-                }
             }
         });
 
