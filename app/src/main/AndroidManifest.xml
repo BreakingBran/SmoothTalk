@@ -16,7 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Report"></activity>
+
+        <activity android:name=".Report" />
+        <activity android:name=".NewWords"></activity>
     </application>
 
 </manifest>

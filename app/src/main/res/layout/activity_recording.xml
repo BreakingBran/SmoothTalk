@@ -11,18 +11,19 @@
         android:layout_height="28dp"
         android:layout_marginTop="28dp"
         android:text="SmoothTalk"
+        android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.134" />
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintHorizontal_bias="0.501"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.134" />
 
     <Button
-        android:id="@+id/start_button"
+        android:id="@+id/end_button"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="250dp"
         android:layout_height="250dp"
@@ -30,7 +31,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="38dp"
-        android:text="Listen to me!"
+        android:background="@drawable/end_button"
+        android:text="I'm done speaking! Generate report"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:textColor="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,10 +48,12 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:src='@drawable/settings_icon'
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/settings_icon" />
 
     <ImageButton
         android:id="@+id/report_button"
@@ -58,10 +62,12 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:src='@drawable/report_icon'
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.81"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/report_icon" />
 
 
 </android.support.constraint.ConstraintLayout>
