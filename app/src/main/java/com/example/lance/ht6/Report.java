@@ -12,6 +12,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,7 +47,7 @@ public class Report extends AppCompatActivity {
 
         ArrayList<ReportData> items = WriteReport.getReportData();
 
-        generateGraph(chart, items);
+        multiple_graphs(chart, items);
 
     }
 
@@ -62,6 +63,38 @@ public class Report extends AppCompatActivity {
         return (float) milliseconds;
     }
 
+    private static float dateStringToFloat2(String date) {
+        int x = Integer.parseInt(date);
+        return (float) x;
+    }
+
+    private static void multiple_graphs(LineChart chart, ArrayList<ReportData> items){
+        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        Random rand = new Random();
+        LineData lineData;
+        int randomColour;
+        for(ReportData item : items){
+            List<Entry> entries = new ArrayList<Entry>();
+            for (Posn data : item.getPosns()) {
+                // turn your data into Entry objects
+                entries.add(new Entry(dateStringToFloat2(data.x()), data.y()));
+//                entries.add(new Entry((float) data.x(), (float) data.y()));
+            }
+            LineDataSet dataSet = new LineDataSet(entries, item.getWord());
+//            (entries, item.getWord()); // add entries to dataset
+            randomColour = rand.nextInt();
+            dataSet.setColor(randomColour);
+            dataSet.setValueTextColor(randomColour);
+            dataSets.add(dataSet);
+        }
+        lineData = new LineData(dataSets);
+        chart.setData(lineData);
+        chart.invalidate(); // refresh
+
+    }
+
+
+
     private static void generateGraph(LineChart chart, ArrayList<ReportData> items){
 //        PHIL WILL MAKE A FUNCTION THAT WILL GIVE A LIST OF DATA POINTS
         Random rand = new Random();
@@ -70,7 +103,8 @@ public class Report extends AppCompatActivity {
             List<Entry> entries = new ArrayList<Entry>();
             for (Posn data : item.getPosns()) {
                 // turn your data into Entry objects
-                entries.add(new Entry(dateStringToFloat(data.x()), data.y()));
+                entries.add(new Entry(dateStringToFloat2(data.x()), data.y()));
+//                entries.add(new Entry((float) data.x(), (float) data.y()));
             }
             LineDataSet dataSet = new LineDataSet(entries, item.getWord()); // add entries to dataset
             randomColour = rand.nextInt();

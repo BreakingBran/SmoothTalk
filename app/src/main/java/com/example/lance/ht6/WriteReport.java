@@ -38,7 +38,8 @@ public class WriteReport extends AppCompatActivity {
 
         List<String> wordList = DatabaseUtilities.getWordList(getContext().getFilesDir());
 
-        int sessionId = DatabaseUtilities.getSessionId(dbEvents);
+//        int sessionId = DatabaseUtilities.getSessionId(dbEvents);
+        int sessionId = 0;
 
         setContentView(R.layout.activity_write_report);
 
@@ -50,6 +51,10 @@ public class WriteReport extends AppCompatActivity {
         for (int i=0; i < wordList.size(); i++) {
             allReportData.add(DatabaseUtilities.generatePlotData(dbReports, wordList.get(i), sessionId));
         }
+
+        Intent showReport = new Intent(WriteReport.this, Report.class);
+        startActivity(showReport);
+
     }
 
     public Context getContext() {

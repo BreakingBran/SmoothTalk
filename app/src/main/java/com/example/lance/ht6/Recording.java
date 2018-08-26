@@ -24,6 +24,7 @@ import com.example.lance.ht6.schemas.CountsTableContract;
 import com.example.lance.ht6.schemas.CountsTableDbHelper;
 import com.example.lance.ht6.schemas.EventsTableContract;
 import com.example.lance.ht6.schemas.EventsTableDbHelper;
+import com.example.lance.ht6.schemas.ReportPerMinuteDbHelper;
 import com.example.lance.ht6.utils.DatabaseUtilities;
 
 import java.io.BufferedReader;
@@ -51,12 +52,14 @@ import static android.widget.Toast.makeText;
 public class Recording extends AppCompatActivity implements
         RecognitionListener {
 
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private EventsTableDbHelper dbEventsHelper;
     private SQLiteDatabase dbEvents;
     private CountsTableDbHelper dbCountsHelper;
     private SQLiteDatabase dbCounts;
     private List<String> wordList;
+    private ReportPerMinuteDbHelper dbReportsHelper;
+    private SQLiteDatabase dbReports;
 
     /* Temp queries */
     private static final String[] sqlQueryLikeArgs = { "like" };
@@ -101,6 +104,8 @@ public class Recording extends AppCompatActivity implements
         dbCountsHelper = new CountsTableDbHelper(getContext());
         dbEvents = dbEventsHelper.getWritableDatabase();
         dbCounts = dbCountsHelper.getWritableDatabase();
+        dbReportsHelper = new ReportPerMinuteDbHelper(getContext());
+        dbReports = dbReportsHelper.getWritableDatabase();
 
         // Check if user has given permission to record audio
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -244,10 +249,10 @@ public class Recording extends AppCompatActivity implements
         Cursor resultLike = dbEvents.rawQuery(sqlQuery, sqlQueryLikeArgs);
         Cursor resultUm = dbEvents.rawQuery(sqlQuery, sqlQueryUmArgs);
         if (resultLike.moveToFirst()) {
-            Log.i(Recording.class.getSimpleName(), resultLike.getString(0) + Integer.toString(resultLike.getInt(1)));
+//            Log.i(Recording.class.getSimpleName(), resultLike.getString(0) + Integer.toString(resultLike.getInt(1)));
         }
         if (resultUm.moveToFirst()) {
-            Log.i(Recording.class.getSimpleName(), resultUm.getString(0) + Integer.toString(resultUm.getInt(1)));
+//            Log.i(Recording.class.getSimpleName(), resultUm.getString(0) + Integer.toString(resultUm.getInt(1)));
         }
 
     }

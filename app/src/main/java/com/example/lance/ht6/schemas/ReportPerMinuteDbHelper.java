@@ -13,7 +13,7 @@ public class ReportPerMinuteDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + ReportPerMinuteEntry.TABLE_NAME + " (" +
                     ReportPerMinuteEntry._ID + " INTEGER PRIMARY KEY," +
                     ReportPerMinuteEntry.DATE_COLUMN + " TEXT," +
-                    ReportPerMinuteEntry.MINUTE_COLUMN + " INTEGER," +
+                    ReportPerMinuteEntry.MINUTE_COLUMN + " STRING," +
                     ReportPerMinuteEntry.WORD_COLUMN + " TEXT," +
                     ReportPerMinuteEntry.COUNT_COLUMN + " INTEGER," +
                     ReportPerMinuteEntry.SESSION_COLUMN + " INTEGER)";
@@ -22,7 +22,7 @@ public class ReportPerMinuteDbHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + ReportPerMinuteEntry.TABLE_NAME;
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Reports.db";
+    public static final String DATABASE_NAME = "Reports4.db";
 
     public ReportPerMinuteDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

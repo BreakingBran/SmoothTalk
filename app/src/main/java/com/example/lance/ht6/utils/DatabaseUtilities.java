@@ -15,13 +15,34 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class DatabaseUtilities {
+
+    public static int COUNTER = 1;
+    public static Map<String, Integer> map = new HashMap<String, Integer>();
+    public static List<String> wordListHard = Arrays.asList(new String[]{"um", "like", "alice", "lance", "phil", "jerry"});
+
+    public static void updateMap(List<String> wordList) {
+        for (int i=0; i < wordList.size(); i++) {
+            if (map.containsKey(wordList.get(i))) {
+                map.put(wordList.get(i), map.get(wordList.get(i)) + 1);
+            }
+            else {
+                map.put(wordList.get(i), 1);
+            }
+        }
+    }
+
 
     public static void updateEvents(SQLiteDatabase dbEvents,
                              String text,
@@ -59,20 +80,33 @@ public class DatabaseUtilities {
     public static ReportData generatePlotData(SQLiteDatabase dbReports,
                                  String word,
                                  int sessionId){
-
-        String sqlQuery = "select interval, count from ReportMinutes where word = ? and session = ?";
-        String[] sqlQueryArguments = { word, Integer.toString(sessionId) };
+        String sqlQuery = "select interval, count from ReportMinutes where word = ?";
+        String[] sqlQueryArguments = { word };
         Cursor resultRows = dbReports.rawQuery(sqlQuery, sqlQueryArguments);
-        return new ReportData(word, getNewValuesPosn(resultRows));
+        if (resultRows.moveToFirst()) {
+            return new ReportData(word, getNewValuesPosn(resultRows, word));
+        }
+        ArrayList<Posn> x = new ArrayList<Posn>();
+//        x.add(new Posn(1, 2));
+        return new ReportData("test", x);
     }
 
     /** Generates <word, count> list from queried rows. **/
-    private static ArrayList<Posn> getNewValuesPosn(Cursor newRows) {
+    private static ArrayList<Posn> getNewValuesPosn(Cursor newRows, String word) {
+        Random rand = new Random();
         ArrayList<Posn> retVal = new ArrayList<>();
         Posn newValues;
         if(newRows.moveToFirst()) {
             do {
-                newValues = new Posn(newRows.getString(0), newRows.getInt(1));
+//                int x = rand.nextInt(1000);
+                COUNTER += 1;
+                int x = COUNTER;
+                updateMap(wordListHard);
+//                newValues = new Posn(Integer.toString(x), newRows.getInt(1));
+                newValues = new Posn(Integer.toString(map.get(word)), newRows.getInt(1));
+//                if (newRows.getString(0) == null){
+//                    newValues = new Posn
+//                }
                 retVal.add(newValues);
             } while(newRows.moveToNext());
         }
@@ -99,18 +133,13 @@ public class DatabaseUtilities {
                                       List<String> wordList,
                                       int sessionId) {
         // build query
-        String newRowQuery = "select datetime((strftime('%s', timestamp) / 3600) * 3600, 'unixepoch') interval, word, count(*) as count " +
+        String newRowQuery = "select datetime((strftime('%s', timestamp) / 3600) * 3600, 'unixepoch') as interval, word, count(*) as count " +
                 "from Events " +
-                "where session = ? " +
                 "GROUP BY interval, word " +
                 "ORDER BY interval";
 
         // get new rows from events
-        Cursor newRows = dbEvents.rawQuery(newRowQuery, new String[]{ Integer.toString(sessionId) });
-
-        // update rows where session matches the session_id
-        String selection = ReportPerMinuteEntry.SESSION_COLUMN + " LIKE ?";
-        String[] selectionArgs = { Integer.toString(sessionId) };
+        Cursor newRows = dbEvents.rawQuery(newRowQuery, new String[]{});
 
         // loop through the new rows
         dbReports.beginTransaction();
@@ -127,11 +156,10 @@ public class DatabaseUtilities {
         }
 
         for (int i = 0; i < updatedTable.size(); i++) {
-            dbReports.update(
+            dbReports.insert(
                     ReportPerMinuteEntry.TABLE_NAME,
-                    updatedTable.get(i),
-                    selection,
-                    selectionArgs);
+                    null,
+                    updatedTable.get(i));
         }
 
         dbReports.setTransactionSuccessful();
