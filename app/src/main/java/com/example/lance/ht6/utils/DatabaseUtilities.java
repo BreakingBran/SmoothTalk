@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.lance.ht6.schemas.EventsTableContract.EventsEntry;
+import com.example.lance.ht6.schemas.ReportPerMinuteTableContract;
+import com.example.lance.ht6.schemas.ReportPerMinuteTableContract.ReportPerMinuteEntry;
 import com.example.lance.ht6.schemas.CountsTableContract.CountsEntry;
 
 import java.text.DateFormat;
@@ -46,9 +48,19 @@ public class DatabaseUtilities {
         dbCounts.insert(CountsEntry.TABLE_NAME, null, newCount);
     }
 
+    /** Updates Reports table from Events Table **/
+    public void createReportPerMinute(SQLiteDatabase dbEvents,
+                                      SQLiteDatabase dbReports,
+                                      List<String> wordList,
+                                      int sessionId) {
+        // update dbReports
+    }
+
     public void resetTables(SQLiteDatabase dbEvents,
-                            SQLiteDatabase dbCounts) {
+                            SQLiteDatabase dbCounts,
+                            SQLiteDatabase dbReports,) {
         dbEvents.execSQL("delete from " + EventsEntry.TABLE_NAME);
         dbCounts.execSQL("delete from " + CountsEntry.TABLE_NAME);
+        dbReports.execSQL("delete from " + ReportPerMinuteEntry.TABLE_NAME);
     }
 }

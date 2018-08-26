@@ -3,25 +3,28 @@ package com.example.lance.ht6.schemas;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.example.lance.ht6.schemas.EventsTableContract.EventsEntry;
 
-public class EventsTableDbHelper extends SQLiteOpenHelper {
+import com.example.lance.ht6.schemas.ReportPerMinuteTableContract.ReportPerMinuteEntry;
+
+public class ReportPerMinuteDbHelper extends SQLiteOpenHelper {
     Context context;
 
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + EventsEntry.TABLE_NAME + " (" +
-                    EventsEntry._ID + " INTEGER PRIMARY KEY," +
-                    EventsEntry.TIMESTAMP_COLUMN + " TEXT," +
-                    EventsEntry.WORD_COLUMN + " TEXT," +
-                    EventsEntry.SESSION_COLUMN + " INTEGER)";
+            "CREATE TABLE " + ReportPerMinuteEntry.TABLE_NAME + " (" +
+                    ReportPerMinuteEntry._ID + " INTEGER PRIMARY KEY," +
+                    ReportPerMinuteEntry.DATE_COLUMN + " TEXT," +
+                    ReportPerMinuteEntry.MINUTE_COLUMN + " INTEGER," +
+                    ReportPerMinuteEntry.WORD_COLUMN + " TEXT," +
+                    ReportPerMinuteEntry.COUNT_COLUMN + " INTEGER," +
+                    ReportPerMinuteEntry.SESSION_COLUMN + " INTEGER)";
 
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + EventsEntry.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + ReportPerMinuteEntry.TABLE_NAME;
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Events.db";
+    public static final String DATABASE_NAME = "Reports.db";
 
-    public EventsTableDbHelper(Context context) {
+    public ReportPerMinuteDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
