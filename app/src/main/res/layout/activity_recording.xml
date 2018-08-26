@@ -4,23 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"><![CDATA[
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginTop="28dp"
-        android:text="SmoothTalk"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintHorizontal_bias="0.501"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.134" />
+
+    ]]>
 
     <Button
         android:id="@+id/end_button"
@@ -38,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.557" />
+        app:layout_constraintVertical_bias="0.503" />
 
     <ImageButton
         android:id="@+id/settings_button"
@@ -67,6 +60,14 @@
         app:layout_constraintHorizontal_bias="0.81"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/report_icon" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="367dp"
+        android:layout_height="117dp"
+        app:srcCompat="@drawable/logo_dark"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="34dp" />
 
 
 </android.support.constraint.ConstraintLayout>
