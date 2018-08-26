@@ -54,7 +54,7 @@ public class NewWords extends AppCompatActivity {
             String textToWrite = wordField.getText().toString();
             // Longer words should have lower threshold
             if (textToWrite.length() < 5) {
-                textToWrite = "\n" + textToWrite + " /5e-1/";
+                textToWrite = "\n" + textToWrite + " /1e-1/";
             } else {
                 textToWrite = "\n" + textToWrite + " /1e-10/";
             }

@@ -70,7 +70,8 @@ public class Recording extends AppCompatActivity implements
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
 
     private SpeechRecognizer recognizer;
-    private HashMap<String, Integer> captions;
+    private int hypolength;
+
 
     public Context getContext() {
         return this.getApplicationContext();
@@ -183,14 +184,15 @@ public class Recording extends AppCompatActivity implements
      */
     @Override
     public void onPartialResult(Hypothesis hypothesis) {
-        if (hypothesis == null)
+        if (hypothesis == null || hypothesis.getHypstr().split("\\s+").length == hypolength)
             return;
+
+        hypolength = hypothesis.getHypstr().split("\\s+").length;
 
         String text = hypothesis.getHypstr().split("\\s+")[0];
         makeText(getContext(), "Detected " + text, Toast.LENGTH_SHORT);
          Log.i(Recording.class.getSimpleName(), "DETECTED " + text + "\n");
             updateEvents(text);
-            for (int i = 0; i <100000; i++);
     }
 
     /**
