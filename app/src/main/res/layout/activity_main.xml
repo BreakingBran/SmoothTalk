@@ -34,6 +34,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.557" />
 
+    <Button
+        android:id="@+id/clear_button"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/clear_button"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Clear"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="#f5f5f5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.581"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.558" />
+
     <ImageButton
         android:id="@+id/settings_button"
         android:layout_width="wrap_content"

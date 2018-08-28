@@ -21,8 +21,8 @@ public class ReportPerMinuteDbHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + ReportPerMinuteEntry.TABLE_NAME;
 
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Reports4.db";
+    public static final int DATABASE_VERSION = 2;
+    public static final String DATABASE_NAME = "Reports.db";
 
     public ReportPerMinuteDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

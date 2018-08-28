@@ -13,12 +13,13 @@ public class CountsTableDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + CountsEntry.TABLE_NAME + " (" +
                     CountsEntry._ID + " INTEGER PRIMARY KEY," +
                     CountsEntry.WORD_COLUMN + " TEXT," +
-                    CountsEntry.COUNT_COLUMN + " INTEGER)";
+                    CountsEntry.COUNT_COLUMN + " INTEGER," +
+                    CountsEntry.SESSION_COLUMN + " INTEGER)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + CountsEntry.TABLE_NAME;
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "Counts.db";
 
     public CountsTableDbHelper(Context context) {

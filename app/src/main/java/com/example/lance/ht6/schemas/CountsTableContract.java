@@ -10,5 +10,6 @@ public class CountsTableContract {
         public static final String TABLE_NAME = "Counts";
         public static final String WORD_COLUMN = "word";
         public static final String COUNT_COLUMN = "count";
+        public static final String SESSION_COLUMN = "session";
     }
 }

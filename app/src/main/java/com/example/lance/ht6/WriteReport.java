@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 
 import com.example.lance.ht6.schemas.ReportPerMinuteDbHelper;
 import com.example.lance.ht6.schemas.EventsTableDbHelper;
@@ -38,8 +34,7 @@ public class WriteReport extends AppCompatActivity {
 
         List<String> wordList = DatabaseUtilities.getWordList(getContext().getFilesDir());
 
-//        int sessionId = DatabaseUtilities.getSessionId(dbEvents);
-        int sessionId = 0;
+        int sessionId = DatabaseUtilities.getLastSessionId(dbEvents);
 
         setContentView(R.layout.activity_write_report);
 

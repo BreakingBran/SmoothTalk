@@ -16,6 +16,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,10 @@ public class Report extends AppCompatActivity {
     private static final String TAG = "Report";
     Button go_back_report;
     LineChart chart;
+
+    private static Date today = new Date();
+    private static String todayString = DatabaseUtilities.f.format(today);
+    public static float initialTime = DatabaseUtilities.dateStringToFloat(todayString);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,75 +52,46 @@ public class Report extends AppCompatActivity {
 
         ArrayList<ReportData> items = WriteReport.getReportData();
 
-        multiple_graphs(chart, items);
+        generateGraph(chart, items);
 
     }
 
-    private static float dateStringToFloat(String date) {
-        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-        long milliseconds = 0l;
-        try {
-            Date d = f.parse(date);
-            milliseconds = d.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return (float) milliseconds;
-    }
-
-    private static float dateStringToFloat2(String date) {
-        int x = Integer.parseInt(date);
-        return (float) x;
-    }
-
-    private static void multiple_graphs(LineChart chart, ArrayList<ReportData> items){
+    /** Generates graph from a list of data points in form of ReportData objects. **/
+    private static void generateGraph(LineChart chart, ArrayList<ReportData> items){
         List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         Random rand = new Random();
         LineData lineData;
         int randomColour;
+        // Get the initial time
+        if (items.size() > 0) {
+            ArrayList<Posn> firstItem = items.get(0).getPosns();
+            if (firstItem.size() > 0) {
+                String firstDate = firstItem.get(0).getX();
+                initialTime = DatabaseUtilities.dateStringToFloat(firstDate);
+            }
+        }
+
         for(ReportData item : items){
             List<Entry> entries = new ArrayList<Entry>();
+            // Plot all points zero-ed at the first interval
             for (Posn data : item.getPosns()) {
                 // turn your data into Entry objects
-                entries.add(new Entry(dateStringToFloat2(data.x()), data.y()));
-//                entries.add(new Entry((float) data.x(), (float) data.y()));
+                entries.add(new Entry(DatabaseUtilities.dateStringToFloatRelative(
+                        initialTime,
+                        data.getX()),
+                        data.getY()));
             }
+            // Add entries to dataset
             LineDataSet dataSet = new LineDataSet(entries, item.getWord());
-//            (entries, item.getWord()); // add entries to dataset
             randomColour = rand.nextInt();
             dataSet.setColor(randomColour);
             dataSet.setValueTextColor(randomColour);
+            // Add dataset to all datasets
             dataSets.add(dataSet);
         }
         lineData = new LineData(dataSets);
         chart.setData(lineData);
         chart.invalidate(); // refresh
-
-    }
-
-
-
-    private static void generateGraph(LineChart chart, ArrayList<ReportData> items){
-//        PHIL WILL MAKE A FUNCTION THAT WILL GIVE A LIST OF DATA POINTS
-        Random rand = new Random();
-        int randomColour;
-        for(ReportData item : items){
-            List<Entry> entries = new ArrayList<Entry>();
-            for (Posn data : item.getPosns()) {
-                // turn your data into Entry objects
-                entries.add(new Entry(dateStringToFloat2(data.x()), data.y()));
-//                entries.add(new Entry((float) data.x(), (float) data.y()));
-            }
-            LineDataSet dataSet = new LineDataSet(entries, item.getWord()); // add entries to dataset
-            randomColour = rand.nextInt();
-            dataSet.setColor(randomColour);
-            dataSet.setValueTextColor(randomColour);
-
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            chart.invalidate(); // refresh
-
-        }
 
     }
 }

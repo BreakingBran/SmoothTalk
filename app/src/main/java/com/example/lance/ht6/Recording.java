@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -52,23 +55,22 @@ import static android.widget.Toast.makeText;
 public class Recording extends AppCompatActivity implements
         RecognitionListener {
 
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    /* Database inititialization */
     private EventsTableDbHelper dbEventsHelper;
     private SQLiteDatabase dbEvents;
     private CountsTableDbHelper dbCountsHelper;
     private SQLiteDatabase dbCounts;
-    private List<String> wordList;
     private ReportPerMinuteDbHelper dbReportsHelper;
     private SQLiteDatabase dbReports;
 
-    /* Temp queries */
-    private static final String[] sqlQueryLikeArgs = { "like" };
-    private static final String[] sqlQueryUmArgs = { "um" };
+    private List<String> wordList;
 
+    public int currentSessionId = -1;
 
     Button stopButton;
     ImageButton settingsButton;
     ImageButton reportButton;
+    ConstraintLayout backgroundView;
     private static final String TAG = "Recording";
     private static final String KEYWORDS_SEARCH = "fillers";
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
@@ -102,10 +104,17 @@ public class Recording extends AppCompatActivity implements
         /* Events database configuration */
         dbEventsHelper = new EventsTableDbHelper(getContext());
         dbCountsHelper = new CountsTableDbHelper(getContext());
+        dbReportsHelper = new ReportPerMinuteDbHelper(getContext());
         dbEvents = dbEventsHelper.getWritableDatabase();
         dbCounts = dbCountsHelper.getWritableDatabase();
-        dbReportsHelper = new ReportPerMinuteDbHelper(getContext());
         dbReports = dbReportsHelper.getWritableDatabase();
+
+        // TO-DO: Temp until we add button to reset tables
+        DatabaseUtilities.resetTables(dbEvents,
+                dbCounts,
+                dbReports);
+
+        currentSessionId = DatabaseUtilities.getLastSessionId(dbEvents) + 1;
 
         // Check if user has given permission to record audio
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -197,8 +206,40 @@ public class Recording extends AppCompatActivity implements
 
         String text = hypothesis.getHypstr().split("\\s+")[0];
         makeText(getContext(), "Detected " + text, Toast.LENGTH_SHORT);
-         Log.i(Recording.class.getSimpleName(), "DETECTED " + text + "\n");
-            updateEvents(text);
+        Log.i(Recording.class.getSimpleName(), "DETECTED " + text + "\n");
+        // Flash the screen blue
+        backgroundView = findViewById(R.id.background);
+        updateColor(Color.BLUE);
+
+        // Update database tables
+            DatabaseUtilities.updateEvents(dbEvents,
+                    text,
+                    wordList,
+                    currentSessionId);
+            DatabaseUtilities.updateCounts(dbCounts,
+                    text,
+                    wordList,
+                    currentSessionId);
+    }
+
+    /** Change background screen colour for 1 second. **/
+    private void updateColor(int color) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                backgroundView.setBackgroundColor(color);
+                new CountDownTimer(500, 100) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        backgroundView.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }.start();
+            }
+        });
     }
 
     /**
@@ -211,51 +252,6 @@ public class Recording extends AppCompatActivity implements
             makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         }
     }
-    public void updateEvents(String text) {
-        ContentValues newEvent = new ContentValues();
-        String date = df.format(Calendar.getInstance().getTime());
-        if (wordList.contains(text)) {
-            // insert database record
-            newEvent.put(EventsTableContract.EventsEntry.TIMESTAMP_COLUMN, date);
-            newEvent.put(EventsTableContract.EventsEntry.WORD_COLUMN, text);
-            dbEvents.insert(EventsTableContract.EventsEntry.TABLE_NAME, null, newEvent);
-        }
-    }
-
-    public void updateCounts(String text) {
-        int count = 0;
-        ContentValues newCount = new ContentValues();
-        // Get existing count
-        if (wordList.contains(text)){
-            Cursor result = dbCounts.rawQuery("SELECT count from Counts where word = ?", new String[]{text});
-            if (result.moveToFirst()) {
-                count = result.getInt(0) + 1;
-            }
-        }
-        newCount.put(CountsTableContract.CountsEntry.WORD_COLUMN, text);
-        newCount.put(CountsTableContract.CountsEntry.COUNT_COLUMN, count);
-        dbCounts.insert(CountsTableContract.CountsEntry.TABLE_NAME, null, newCount);
-    }
-
-    public void resetTables() {
-        // Get list of dbs
-        dbEvents.execSQL("delete from " + EventsTableContract.EventsEntry.TABLE_NAME);
-        dbCounts.execSQL("delete from " + CountsTableContract.CountsEntry.TABLE_NAME);
-    }
-
-
-    public void printCounts() {
-        String sqlQuery = "SELECT word, count(*) from Events where " + EventsTableContract.EventsEntry.WORD_COLUMN + " = ?";
-        Cursor resultLike = dbEvents.rawQuery(sqlQuery, sqlQueryLikeArgs);
-        Cursor resultUm = dbEvents.rawQuery(sqlQuery, sqlQueryUmArgs);
-        if (resultLike.moveToFirst()) {
-//            Log.i(Recording.class.getSimpleName(), resultLike.getString(0) + Integer.toString(resultLike.getInt(1)));
-        }
-        if (resultUm.moveToFirst()) {
-//            Log.i(Recording.class.getSimpleName(), resultUm.getString(0) + Integer.toString(resultUm.getInt(1)));
-        }
-
-    }
 
     @Override
     public void onBeginningOfSpeech() {
@@ -266,7 +262,6 @@ public class Recording extends AppCompatActivity implements
      */
     @Override
     public void onEndOfSpeech() {
-        printCounts();
         if (!recognizer.getSearchName().equals(KEYWORDS_SEARCH))
             switchSearch(KEYWORDS_SEARCH);
     }
